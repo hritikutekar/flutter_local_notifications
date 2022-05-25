@@ -210,16 +210,16 @@ public class FlutterLocalNotificationsPlugin
         RemoteViews customInlineView = new RemoteViews(context.getPackageName(), R.layout.custom_inline_notifcation);
         RemoteViews customInlineViewExpanded = new RemoteViews(context.getPackageName(), R.layout.custom_inline_expanded_notification_android_12);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            customInlineView = new RemoteViews(context.getPackageName(), R.layout.custom_inline_notification_android_12);
-            customInlineView.setTextViewText(R.id.title, defaultStyleInformation.htmlFormatTitle
-                    ? fromHtml(notificationDetails.title)
-                    : notificationDetails.title);
-
-            customInlineViewExpanded.setTextViewText(R.id.title, defaultStyleInformation.htmlFormatTitle
-                    ? fromHtml(notificationDetails.title)
-                    : notificationDetails.title);
-        } else {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            customInlineView = new RemoteViews(context.getPackageName(), R.layout.custom_inline_notification_android_12);
+//            customInlineView.setTextViewText(R.id.title, defaultStyleInformation.htmlFormatTitle
+//                    ? fromHtml(notificationDetails.title)
+//                    : notificationDetails.title);
+//
+//            customInlineViewExpanded.setTextViewText(R.id.title, defaultStyleInformation.htmlFormatTitle
+//                    ? fromHtml(notificationDetails.title)
+//                    : notificationDetails.title);
+//        } else {
             customInlineView.setImageViewBitmap(
                     R.id.app_icon,
                     getBitmapFromSource(context, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource)
@@ -233,7 +233,7 @@ public class FlutterLocalNotificationsPlugin
             String date = simpleDateFormat.format(new Date());
 
             customInlineView.setTextViewText(R.id.time, date);
-        }
+//        }
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, notificationDetails.channelId)
@@ -246,9 +246,9 @@ public class FlutterLocalNotificationsPlugin
                         .setOngoing(BooleanUtils.getValue(notificationDetails.ongoing))
                         .setOnlyAlertOnce(BooleanUtils.getValue(notificationDetails.onlyAlertOnce));
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            builder.setCustomBigContentView(customInlineViewExpanded);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+//            builder.setCustomBigContentView(customInlineViewExpanded);
+//        }
 
         setSmallIcon(context, notificationDetails, builder);
         builder.setLargeIcon(
