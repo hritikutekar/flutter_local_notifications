@@ -231,7 +231,7 @@ public class FlutterLocalNotificationsPlugin
 //                        .setOngoing(BooleanUtils.getValue(notificationDetails.ongoing))
 //                        .setOnlyAlertOnce(BooleanUtils.getValue(notificationDetails.onlyAlertOnce));
 
-//        setSmallIcon(context, notificationDetails, builder);
+        setSmallIcon(context, notificationDetails, builder);
 //        builder.setLargeIcon(
 //                getBitmapFromSource(
 //                        context, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource));
