@@ -223,59 +223,59 @@ public class FlutterLocalNotificationsPlugin
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, notificationDetails.channelId)
-                        .setCustomContentView(customInlineView)
-                        .setTicker(notificationDetails.ticker)
-                        .setAutoCancel(BooleanUtils.getValue(notificationDetails.autoCancel))
-                        .setContentIntent(pendingIntent)
-                        .setPriority(notificationDetails.priority)
-                        .setOngoing(BooleanUtils.getValue(notificationDetails.ongoing))
-                        .setOnlyAlertOnce(BooleanUtils.getValue(notificationDetails.onlyAlertOnce));
+                        .setCustomContentView(customInlineView);
+//                        .setTicker(notificationDetails.ticker)
+//                        .setAutoCancel(BooleanUtils.getValue(notificationDetails.autoCancel))
+//                        .setContentIntent(pendingIntent)
+//                        .setPriority(notificationDetails.priority)
+//                        .setOngoing(BooleanUtils.getValue(notificationDetails.ongoing))
+//                        .setOnlyAlertOnce(BooleanUtils.getValue(notificationDetails.onlyAlertOnce));
 
-        setSmallIcon(context, notificationDetails, builder);
-        builder.setLargeIcon(
-                getBitmapFromSource(
-                        context, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource));
-        if (notificationDetails.color != null) {
-            builder.setColor(notificationDetails.color.intValue());
-        }
-
-        if (notificationDetails.colorized != null) {
-            builder.setColorized(notificationDetails.colorized);
-        }
-
-        if (notificationDetails.showWhen != null) {
-            builder.setShowWhen(BooleanUtils.getValue(notificationDetails.showWhen));
-        }
-
-        if (notificationDetails.when != null) {
-            builder.setWhen(notificationDetails.when);
-        }
-
-        if (notificationDetails.usesChronometer != null) {
-            builder.setUsesChronometer(notificationDetails.usesChronometer);
-        }
-
-        if (BooleanUtils.getValue(notificationDetails.fullScreenIntent)) {
-            builder.setFullScreenIntent(pendingIntent, true);
-        }
-
-        if (!StringUtils.isNullOrEmpty(notificationDetails.shortcutId)) {
-            builder.setShortcutId(notificationDetails.shortcutId);
-        }
-
-        if (!StringUtils.isNullOrEmpty(notificationDetails.subText)) {
-            builder.setSubText(notificationDetails.subText);
-        }
-
-        setVisibility(notificationDetails, builder);
-        applyGrouping(notificationDetails, builder);
-        setSound(context, notificationDetails, builder);
-        setVibrationPattern(notificationDetails, builder);
-        setLights(notificationDetails, builder);
-        setStyle(context, notificationDetails, builder);
-        setProgress(notificationDetails, builder);
-        setCategory(notificationDetails, builder);
-        setTimeoutAfter(notificationDetails, builder);
+//        setSmallIcon(context, notificationDetails, builder);
+//        builder.setLargeIcon(
+//                getBitmapFromSource(
+//                        context, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource));
+//        if (notificationDetails.color != null) {
+//            builder.setColor(notificationDetails.color.intValue());
+//        }
+//
+//        if (notificationDetails.colorized != null) {
+//            builder.setColorized(notificationDetails.colorized);
+//        }
+//
+//        if (notificationDetails.showWhen != null) {
+//            builder.setShowWhen(BooleanUtils.getValue(notificationDetails.showWhen));
+//        }
+//
+//        if (notificationDetails.when != null) {
+//            builder.setWhen(notificationDetails.when);
+//        }
+//
+//        if (notificationDetails.usesChronometer != null) {
+//            builder.setUsesChronometer(notificationDetails.usesChronometer);
+//        }
+//
+//        if (BooleanUtils.getValue(notificationDetails.fullScreenIntent)) {
+//            builder.setFullScreenIntent(pendingIntent, true);
+//        }
+//
+//        if (!StringUtils.isNullOrEmpty(notificationDetails.shortcutId)) {
+//            builder.setShortcutId(notificationDetails.shortcutId);
+//        }
+//
+//        if (!StringUtils.isNullOrEmpty(notificationDetails.subText)) {
+//            builder.setSubText(notificationDetails.subText);
+//        }
+//
+//        setVisibility(notificationDetails, builder);
+//        applyGrouping(notificationDetails, builder);
+//        setSound(context, notificationDetails, builder);
+//        setVibrationPattern(notificationDetails, builder);
+//        setLights(notificationDetails, builder);
+//        setStyle(context, notificationDetails, builder);
+//        setProgress(notificationDetails, builder);
+//        setCategory(notificationDetails, builder);
+//        setTimeoutAfter(notificationDetails, builder);
         Notification notification = builder.build();
         if (notificationDetails.additionalFlags != null
                 && notificationDetails.additionalFlags.length > 0) {
