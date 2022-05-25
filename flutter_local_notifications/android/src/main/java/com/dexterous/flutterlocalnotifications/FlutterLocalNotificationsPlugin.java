@@ -17,7 +17,6 @@ import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.service.notification.StatusBarNotification;
@@ -208,47 +207,32 @@ public class FlutterLocalNotificationsPlugin
                 (DefaultStyleInformation) notificationDetails.styleInformation;
 
         RemoteViews customInlineView = new RemoteViews(context.getPackageName(), R.layout.custom_inline_notifcation);
-        RemoteViews customInlineViewExpanded = new RemoteViews(context.getPackageName(), R.layout.custom_inline_expanded_notification_android_12);
 
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            customInlineView = new RemoteViews(context.getPackageName(), R.layout.custom_inline_notification_android_12);
-//            customInlineView.setTextViewText(R.id.title, defaultStyleInformation.htmlFormatTitle
-//                    ? fromHtml(notificationDetails.title)
-//                    : notificationDetails.title);
-//
-//            customInlineViewExpanded.setTextViewText(R.id.title, defaultStyleInformation.htmlFormatTitle
-//                    ? fromHtml(notificationDetails.title)
-//                    : notificationDetails.title);
-//        } else {
-            customInlineView.setImageViewBitmap(
-                    R.id.app_icon,
-                    getBitmapFromSource(context, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource)
-            );
-            customInlineView.setTextViewText(R.id.title, defaultStyleInformation.htmlFormatTitle
-                    ? fromHtml(notificationDetails.title)
-                    : notificationDetails.title);
+        customInlineView.setImageViewBitmap(
+                R.id.app_icon,
+                getBitmapFromSource(context, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource)
+        );
+        customInlineView.setTextViewText(R.id.title, defaultStyleInformation.htmlFormatTitle
+                ? fromHtml(notificationDetails.title)
+                : notificationDetails.title);
 
-            String pattern = "hh:mm";
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
-            String date = simpleDateFormat.format(new Date());
+        String pattern = "hh:mm";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
+        String date = simpleDateFormat.format(new Date());
 
-            customInlineView.setTextViewText(R.id.time, date);
-//        }
+        customInlineView.setTextViewText(R.id.time, date);
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, notificationDetails.channelId)
                         .setCustomContentView(customInlineView)
                         .setCustomBigContentView(customInlineView)
+                        .setCustomHeadsUpContentView(customInlineView)
                         .setTicker(notificationDetails.ticker)
                         .setAutoCancel(BooleanUtils.getValue(notificationDetails.autoCancel))
                         .setContentIntent(pendingIntent)
                         .setPriority(notificationDetails.priority)
                         .setOngoing(BooleanUtils.getValue(notificationDetails.ongoing))
                         .setOnlyAlertOnce(BooleanUtils.getValue(notificationDetails.onlyAlertOnce));
-
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            builder.setCustomBigContentView(customInlineViewExpanded);
-//        }
 
         setSmallIcon(context, notificationDetails, builder);
         builder.setLargeIcon(
