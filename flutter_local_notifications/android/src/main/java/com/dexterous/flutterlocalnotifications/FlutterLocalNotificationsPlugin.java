@@ -17,6 +17,7 @@ import android.graphics.BitmapFactory;
 import android.media.AudioAttributes;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.service.notification.StatusBarNotification;
@@ -207,75 +208,93 @@ public class FlutterLocalNotificationsPlugin
                 (DefaultStyleInformation) notificationDetails.styleInformation;
 
         RemoteViews customInlineView = new RemoteViews(context.getPackageName(), R.layout.custom_inline_notifcation);
-        customInlineView.setImageViewBitmap(
-                R.id.app_icon,
-                getBitmapFromSource(context, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource)
-        );
-        customInlineView.setTextViewText(R.id.title, defaultStyleInformation.htmlFormatTitle
-                ? fromHtml(notificationDetails.title)
-                : notificationDetails.title);
+        RemoteViews customInlineViewExpanded = new RemoteViews(context.getPackageName(), R.layout.custom_inline_expanded_notification_android_12);
 
-        String pattern = "hh:mm";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
-        String date = simpleDateFormat.format(new Date());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            customInlineView = new RemoteViews(context.getPackageName(), R.layout.custom_inline_notification_android_12);
+            customInlineView.setTextViewText(R.id.title, defaultStyleInformation.htmlFormatTitle
+                    ? fromHtml(notificationDetails.title)
+                    : notificationDetails.title);
 
-        customInlineView.setTextViewText(R.id.time, date);
+            customInlineViewExpanded.setTextViewText(R.id.title, defaultStyleInformation.htmlFormatTitle
+                    ? fromHtml(notificationDetails.title)
+                    : notificationDetails.title);
+        } else {
+            customInlineView.setImageViewBitmap(
+                    R.id.app_icon,
+                    getBitmapFromSource(context, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource)
+            );
+            customInlineView.setTextViewText(R.id.title, defaultStyleInformation.htmlFormatTitle
+                    ? fromHtml(notificationDetails.title)
+                    : notificationDetails.title);
+
+            String pattern = "hh:mm";
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
+            String date = simpleDateFormat.format(new Date());
+
+            customInlineView.setTextViewText(R.id.time, date);
+        }
 
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context, notificationDetails.channelId)
-                        .setCustomContentView(customInlineView);
-//                        .setTicker(notificationDetails.ticker)
-//                        .setAutoCancel(BooleanUtils.getValue(notificationDetails.autoCancel))
-//                        .setContentIntent(pendingIntent)
-//                        .setPriority(notificationDetails.priority)
-//                        .setOngoing(BooleanUtils.getValue(notificationDetails.ongoing))
-//                        .setOnlyAlertOnce(BooleanUtils.getValue(notificationDetails.onlyAlertOnce));
+                        .setCustomContentView(customInlineView)
+                        .setCustomBigContentView(customInlineView)
+                        .setTicker(notificationDetails.ticker)
+                        .setAutoCancel(BooleanUtils.getValue(notificationDetails.autoCancel))
+                        .setContentIntent(pendingIntent)
+                        .setPriority(notificationDetails.priority)
+                        .setOngoing(BooleanUtils.getValue(notificationDetails.ongoing))
+                        .setOnlyAlertOnce(BooleanUtils.getValue(notificationDetails.onlyAlertOnce));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            builder.setCustomBigContentView(customInlineViewExpanded);
+        }
 
         setSmallIcon(context, notificationDetails, builder);
-//        builder.setLargeIcon(
-//                getBitmapFromSource(
-//                        context, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource));
-//        if (notificationDetails.color != null) {
-//            builder.setColor(notificationDetails.color.intValue());
-//        }
-//
-//        if (notificationDetails.colorized != null) {
-//            builder.setColorized(notificationDetails.colorized);
-//        }
-//
-//        if (notificationDetails.showWhen != null) {
-//            builder.setShowWhen(BooleanUtils.getValue(notificationDetails.showWhen));
-//        }
-//
-//        if (notificationDetails.when != null) {
-//            builder.setWhen(notificationDetails.when);
-//        }
-//
-//        if (notificationDetails.usesChronometer != null) {
-//            builder.setUsesChronometer(notificationDetails.usesChronometer);
-//        }
-//
-//        if (BooleanUtils.getValue(notificationDetails.fullScreenIntent)) {
-//            builder.setFullScreenIntent(pendingIntent, true);
-//        }
-//
-//        if (!StringUtils.isNullOrEmpty(notificationDetails.shortcutId)) {
-//            builder.setShortcutId(notificationDetails.shortcutId);
-//        }
-//
-//        if (!StringUtils.isNullOrEmpty(notificationDetails.subText)) {
-//            builder.setSubText(notificationDetails.subText);
-//        }
-//
-//        setVisibility(notificationDetails, builder);
-//        applyGrouping(notificationDetails, builder);
-//        setSound(context, notificationDetails, builder);
-//        setVibrationPattern(notificationDetails, builder);
-//        setLights(notificationDetails, builder);
-//        setStyle(context, notificationDetails, builder);
-//        setProgress(notificationDetails, builder);
-//        setCategory(notificationDetails, builder);
-//        setTimeoutAfter(notificationDetails, builder);
+        builder.setLargeIcon(
+                getBitmapFromSource(
+                        context, notificationDetails.largeIcon, notificationDetails.largeIconBitmapSource));
+        if (notificationDetails.color != null) {
+            builder.setColor(notificationDetails.color.intValue());
+        }
+
+        if (notificationDetails.colorized != null) {
+            builder.setColorized(notificationDetails.colorized);
+        }
+
+        if (notificationDetails.showWhen != null) {
+            builder.setShowWhen(BooleanUtils.getValue(notificationDetails.showWhen));
+        }
+
+        if (notificationDetails.when != null) {
+            builder.setWhen(notificationDetails.when);
+        }
+
+        if (notificationDetails.usesChronometer != null) {
+            builder.setUsesChronometer(notificationDetails.usesChronometer);
+        }
+
+        if (BooleanUtils.getValue(notificationDetails.fullScreenIntent)) {
+            builder.setFullScreenIntent(pendingIntent, true);
+        }
+
+        if (!StringUtils.isNullOrEmpty(notificationDetails.shortcutId)) {
+            builder.setShortcutId(notificationDetails.shortcutId);
+        }
+
+        if (!StringUtils.isNullOrEmpty(notificationDetails.subText)) {
+            builder.setSubText(notificationDetails.subText);
+        }
+
+        setVisibility(notificationDetails, builder);
+        applyGrouping(notificationDetails, builder);
+        setSound(context, notificationDetails, builder);
+        setVibrationPattern(notificationDetails, builder);
+        setLights(notificationDetails, builder);
+        setStyle(context, notificationDetails, builder);
+        setProgress(notificationDetails, builder);
+        setCategory(notificationDetails, builder);
+        setTimeoutAfter(notificationDetails, builder);
         Notification notification = builder.build();
         if (notificationDetails.additionalFlags != null
                 && notificationDetails.additionalFlags.length > 0) {
