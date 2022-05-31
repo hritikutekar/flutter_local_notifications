@@ -216,7 +216,7 @@ public class FlutterLocalNotificationsPlugin
                 ? fromHtml(notificationDetails.title)
                 : notificationDetails.title);
 
-        String pattern = "hh:mm";
+        String pattern = "hh:mm a";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern, Locale.ENGLISH);
         String date = simpleDateFormat.format(new Date());
 
